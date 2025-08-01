@@ -102,7 +102,7 @@ const Cars = () => {
         className="px-6 md:px-16 lg:px-24 xl:px-32 mt-10"
       >
         <p className="text-gray-500 xl:px-20 max-w-7xl mx-auto">
-          Showing {filteredCars.length} Cars
+          Showing {filteredCars > 1 ? filteredCars.length : dummyCarData.length} Cars
         </p>
 
         <motion.div
@@ -111,7 +111,11 @@ const Cars = () => {
           transition={{ delay: 0.1 , duration: 0.4 }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 xl:px-20 max-w-7xl mx-auto"
         >
-          {filteredCars.map((car, index) => (
+          {filteredCars > 1 ? filteredCars.map((car, index) => (
+            <div key={index}>
+              <CarCards car={car} />
+            </div>
+          )) : dummyCarData.map((car, index) => (
             <div key={index}>
               <CarCards car={car} />
             </div>

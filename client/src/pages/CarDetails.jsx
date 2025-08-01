@@ -36,7 +36,10 @@ const CarDetails = () => {
   };
 
   useEffect(() => {
-    setCar(cars.find((car) => car._id === id));
+  cars.length > 1
+  ? setCar(cars.find((car) => car._id === id))
+  : setCar(dummyCarData.find((car) => car._id === id));
+
   }, [cars, id]);
 
   return car ? (
@@ -143,7 +146,7 @@ const CarDetails = () => {
         >
           <p className="flex items-center justify-between text-2xl text-gray-800 font-semibold">
             {currency}
-            {car.pricePerDay}
+            {car?.pricePerDay}
             <span className="text-base text-gray-400 font-normal">
               {" "}
               per day
@@ -189,7 +192,7 @@ const CarDetails = () => {
     </div>
   ) : (
     <Loader />
-  );
+  )  
 };
 
 export default CarDetails;

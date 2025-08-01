@@ -108,13 +108,13 @@ const Footer = () => {
               Contact
             </h2>
             <ul className="mt-3 flex flex-col gap-1.5">
-              <li>1234 Luxury Drive</li>
+              <li>Fahad</li>
 
-              <li>San Francisco, CA 9478</li>
+              <li>San Francisco, LA 9478</li>
 
               <li>+1 5295848955</li>
 
-              <li>info@example.com</li>
+              <li>Thefahad674@gmail.com</li>
             </ul>
           </div>
         </motion.div>
@@ -126,7 +126,7 @@ const Footer = () => {
         transition={{ duration: 0.6, delay: 0.6 }}
         className="flex flex-col md:flex-row gap-2 items-center justify-between py-5"
       >
-        <p>© {new Date().getFullYear()} Luxora Rentals. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Thefahad674. All rights reserved.</p>
         <ul className="flex items-center gap-4">
           <li>
             <a href="#">Privacy</a>
