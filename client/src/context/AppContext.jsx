@@ -5,6 +5,24 @@ import { useNavigate } from "react-router-dom";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const originalRequest = error.config;
+    const url = originalRequest?.url || "";
+
+    if (
+      error.response?.status === 401 &&
+      !url.includes("/api/user/data") &&
+      !url.includes("/api/user/cars")
+    ) {
+      toast.error("Not authorized");
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
@@ -15,15 +33,14 @@ export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [pickupDate, setPickupDate] = useState('');
-  const [returnDate, setreturnDate] = useState('');
-
+  const [pickupDate, setPickupDate] = useState("");
+  const [returnDate, setreturnDate] = useState("");
   const [cars, setCars] = useState([]);
 
-  // function to check if user is logged in
   const fetchUser = async () => {
     try {
       const { data } = await axios.get("/api/user/data");
+
       if (data.success) {
         setUser(data.user);
         setIsOwner(data.user.role === "owner");
@@ -31,42 +48,43 @@ export const AppProvider = ({ children }) => {
         navigate("/");
       }
     } catch (error) {
-      toast.error(error.message);
+      navigate("/");
     }
   };
-
-  // Function to fetch all cars from the server
 
   const fetchCars = async () => {
     try {
       const { data } = await axios.get("/api/user/cars");
-      data.success ? setCars(data.cars) : toast.error(data.message);
+      if (data.success) setCars(data.cars);
     } catch (error) {
-      toast.error(error.message);
+      // Silent fail
     }
   };
 
-  // Function to logout the user
+  useEffect(() => {
+    const savedToken = localStorage.getItem("token");
+    if (savedToken) {
+      setToken(savedToken);
+      axios.defaults.headers.common["Authorization"] = `${savedToken}`;
+      fetchUser();
+    } else {
+      setUser(null);
+      setIsOwner(false);
+      axios.defaults.headers.common["Authorization"] = "";
+    }
+
+    fetchCars();
+  }, []);
+
   const logout = () => {
-    localStorage.removeItem('token')
-    setToken(null)
-    setUser(null)
-    setIsOwner(false)
-    axios.defaults.headers.common['Authorization'] = ''
-    toast.success('You have been logged out')
-  }
-
-  // useEffect to retrieve the token from localStorage
- useEffect(() => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    setToken(token);
-    axios.defaults.headers.common["Authorization"] = `${token}`;
-    fetchUser();  
-  }
-  fetchCars();
-}, [token]);
-
+    localStorage.removeItem("token");
+    setToken(null);
+    setUser(null);
+    setIsOwner(false);
+    axios.defaults.headers.common["Authorization"] = "";
+    toast.success("You have been logged out");
+    navigate("/");
+  };
 
   const value = {
     navigate,
@@ -88,12 +106,10 @@ export const AppProvider = ({ children }) => {
     pickupDate,
     setPickupDate,
     returnDate,
-    setreturnDate
+    setreturnDate,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-export const UseAppContext = () => {
-  return useContext(AppContext);
-};
+export const UseAppContext = () => useContext(AppContext);
