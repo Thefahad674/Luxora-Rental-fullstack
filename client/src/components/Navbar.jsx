@@ -18,7 +18,7 @@ const Navbar = () => {
         setIsOwner(true);
         toast.success(data.message);
       } else {
-        toast.error(data.message);
+        toast.error('Login to list you car');
       }
     } catch (error) {
       toast.error(error.message);

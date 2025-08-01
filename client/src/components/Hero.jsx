@@ -46,7 +46,7 @@ const Hero = () => {
       </p>
     </div>
 
-    <div className="flex flex-col items-start gap-2 w-full md:w-auto">
+    <div className="flex flex-col items-start gap-2 w-full md:w-auto relative">
       <label htmlFor="pickup-date">Pick-up Date</label>
       <input
         value={pickupDate}
@@ -54,21 +54,33 @@ const Hero = () => {
         type="date"
         id="pickup-date"
         min={new Date().toISOString().split('T')[0]}
-        className="text-sm text-gray-500 w-full md:w-auto"
+        className="text-sm text-gray-500 w-full md:w-auto appearance-none"
         required
       />
+      {/* Calendar icon for mobile */}
+      <div className="md:hidden absolute right-2 bottom-2 pointer-events-none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+        </svg>
+      </div>
     </div>
 
-    <div className="flex flex-col items-start gap-2 w-full md:w-auto">
+    <div className="flex flex-col items-start gap-2 w-full md:w-auto relative">
       <label htmlFor="return-date">Return Date</label>
       <input
         value={returnDate}
         onChange={(e)=> setreturnDate(e.target.value)}
         type="date"
         id="return-date"
-        className="text-sm text-gray-500 w-full md:w-auto"
+        className="text-sm text-gray-500 w-full md:w-auto appearance-none"
         required
       />
+      {/* Calendar icon for mobile */}
+      <div className="md:hidden absolute right-2 bottom-2 pointer-events-none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+        </svg>
+      </div>
     </div>
   </div>
 
