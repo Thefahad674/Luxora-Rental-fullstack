@@ -5,7 +5,7 @@ import { UseAppContext } from '../../context/AppContext'
 import toast from 'react-hot-toast'
 import pp from '../../assets/dp.jpg'
 
-const SideBar = () => {
+const SideBar = ({ mobileView = false, closeMenu = () => {} }) => {
   const { user, axios, fetchUser } = UseAppContext()
   const location = useLocation()
   const [image, setImage] = useState('')
@@ -30,14 +30,14 @@ const SideBar = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center pt-6 w-full max-w-[210px] border-r border-borderColor text-sm bg-white">
+    <div className={`${mobileView ? 'w-64 p-4' : 'min-h-screen flex flex-col items-center pt-6 w-full max-w-[210px] border-r border-borderColor'} text-sm bg-white`}>
       {/* Avatar */}
       <div className="group relative">
         <label htmlFor="image">
           <img
             src={image ? URL.createObjectURL(image) : pp}
             alt=""
-            className="h-14 w-14 rounded-full mx-auto object-cover border border-borderColor"
+            className={`${mobileView ? 'h-12 w-12' : 'h-14 w-14'} rounded-full mx-auto object-cover border border-borderColor`}
           />
           <input
             type="file"
@@ -65,15 +65,18 @@ const SideBar = () => {
       )}
 
       {/* User name */}
-      <p className="mt-3 text-base font-medium text-center">{user?.name}</p>
+      <p className={`mt-3 text-base font-medium text-center ${mobileView ? 'text-sm' : ''}`}>
+        {user?.name}
+      </p>
 
       {/* Nav Links */}
-      <div className="w-full mt-6">
+      <div className={`w-full mt-6 ${mobileView ? 'pl-2' : ''}`}>
         {ownerMenuLinks.map((link, index) => (
           <NavLink
             key={index}
             to={link.path}
-            className={`relative flex items-center gap-2 w-full py-3 pl-4 pr-2 ${
+            onClick={() => mobileView && closeMenu()}
+            className={`relative flex items-center gap-2 w-full py-3 ${mobileView ? 'pl-3 pr-2' : 'pl-4 pr-2'} ${
               link.path === location.pathname
                 ? 'bg-primary/10 text-primary'
                 : 'text-gray-600'
@@ -86,13 +89,16 @@ const SideBar = () => {
                   : link.icon
               }
               alt="icon"
+              className={mobileView ? 'w-5 h-5' : ''}
             />
             <span className="whitespace-nowrap">{link.name}</span>
-            <div
-              className={`${
-                link.path === location.pathname && 'bg-primary'
-              } w-1.5 h-8 rounded-l right-0 absolute`}
-            ></div>
+            {!mobileView && (
+              <div
+                className={`${
+                  link.path === location.pathname && 'bg-primary'
+                } w-1.5 h-8 rounded-l right-0 absolute`}
+              ></div>
+            )}
           </NavLink>
         ))}
       </div>
